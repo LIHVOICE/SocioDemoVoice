@@ -91,9 +91,9 @@ def generate_plotly_forest_plot(
     fig.update_xaxes(title='Coefficient Value')
 
     fig.update_layout(
-        title=f"Forest Plot: {feature_name} features vs. {coef_name} ({gender})",
+        #title=f"Forest Plot: {feature_name} features vs. {coef_name} ({gender})",
         height=600 + len(columns_to_work_with) * 15,
-        plot_bgcolor="white",
+        plot_bgcolor="lightgrey",
         margin=dict(l=100, r=20, t=80, b=40)
     )
 

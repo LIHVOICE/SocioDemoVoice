@@ -15,7 +15,7 @@ st.sidebar.caption("Select parameters")
 audio_types = ['reading', 'a_vowel phonation'] 
 feature_set_reading = ['egemaps', 'articulation', 'phonological', 'phonation', 'prosody', 'glottal'] 
 feature_set_phonation = ['egemaps', 'phonation', 'prosody', 'glottal'] 
-socio_factors = ['age', 'gender', 'language', 'smoking', 'alcohol', 'education_years', 'speaking_native_tongue' ] 
+socio_factors = ['age', 'language', 'smoking', 'alcohol', 'educ_years', 'native' ] 
 
 audio_type = st.sidebar.selectbox("Choose an audio type:", audio_types)
 if audio_type == 'a_vowel phonation':
@@ -24,7 +24,13 @@ elif audio_type == 'reading':
     feature_set = st.sidebar.selectbox("Choose a feature set:", feature_set_reading)
 
 socio_var = st.sidebar.selectbox("Choose a sociodemographic variable:", socio_factors)
-gender_var = st.sidebar.selectbox("Choose gender variable:", ['both', 'male', 'female'])
+gender_var = st.sidebar.selectbox("Choose gender variable:", ['female', 'male'])
+
+filename = f'{audio_type}_{feature_set}_{gender_var}.npy'
+feature_columns = f'{feature_set}_columns_to_work_with.npy'
+
+print(filename)
+
 
 #choose_feature_type
 #choose_gender
@@ -32,12 +38,19 @@ gender_var = st.sidebar.selectbox("Choose gender variable:", ['both', 'male', 'f
 # ----------------------
 # Main Area
 # ----------------------
-st.title("📊 Forest Plot Explorer")
+if gender_var == 'female':
+    gender_des = 'women'
+elif gender_var == 'male':
+    gender_des = 'men'
+else:
+    gender_des = 'all participants'
+
+st.title(f"The effect of {socio_var} on the {feature_set} features for {gender_des} 📊 ")
 
 # Generate plot
 fig = generate_plotly_forest_plot(
-    input_filename = os.path.join(DATA_FOLDER, 'egemaps_median_regression_coefficients_both_genders.npy'),
-    columns_to_work_with = os.path.join(DATA_FOLDER, 'egemaps_columns_to_work_with.npy'),
+    input_filename = os.path.join(DATA_FOLDER, filename),
+    columns_to_work_with = os.path.join(DATA_FOLDER, feature_columns),
     socio_factors = socio_factors,
     coef_name = socio_var,
     feature_name = feature_set,
