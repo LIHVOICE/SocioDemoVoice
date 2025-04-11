@@ -11,11 +11,13 @@ DATA_FOLDER = "data"
 # ----------------------
 st.sidebar.title("Forest Plot Visualizer 🌲")
 st.sidebar.caption("Select parameters")
-# User input: select the sociodemographic variable
+
 audio_types = ['reading', 'a_vowel phonation'] 
 feature_set_reading = ['egemaps', 'articulation', 'phonological', 'phonation', 'prosody', 'glottal'] 
 feature_set_phonation = ['egemaps', 'phonation', 'prosody', 'glottal'] 
 socio_factors = ['age', 'language', 'smoking', 'alcohol', 'educ_years', 'native' ] 
+
+# User input: select the sociodemographic variable
 
 audio_type = st.sidebar.selectbox("Choose an audio type:", audio_types)
 if audio_type == 'a_vowel phonation':
@@ -29,21 +31,16 @@ gender_var = st.sidebar.selectbox("Choose gender variable:", ['female', 'male'])
 filename = f'{audio_type}_{feature_set}_{gender_var}.npy'
 feature_columns = f'{feature_set}_columns_to_work_with.npy'
 
-print(filename)
-
-
-#choose_feature_type
-#choose_gender
-
-# ----------------------
-# Main Area
-# ----------------------
 if gender_var == 'female':
     gender_des = 'women'
 elif gender_var == 'male':
     gender_des = 'men'
 else:
     gender_des = 'all participants'
+
+# ----------------------
+# Main Area
+# ----------------------
 
 st.title(f"The effect of {socio_var} on the {feature_set} features for {gender_des} 📊 ")
 
