@@ -4,7 +4,7 @@ from utils.plot_helpers import generate_plotly_forest_plot
 import os
 
 # Folder containing the data
-DATA_FOLDER = "data"
+DATA_FOLDER = "regression data"
 
 # ----------------------
 # Sidebar Menu
@@ -15,12 +15,13 @@ st.sidebar.caption("Select parameters")
 audio_types = ['reading', 'a_vowel phonation'] 
 feature_set_reading = ['egemaps', 'articulation', 'phonological', 'phonation', 'prosody', 'glottal'] 
 feature_set_phonation = ['egemaps', 'phonation', 'prosody', 'glottal'] 
-socio_factors = ['age', 'language', 'smoking', 'alcohol', 'educ_years', 'native' ] 
+socio_factors = socio_factors = ['age', 'surveyLocale', 'native', 'educ_years', 'smoking', 'alcohol'] 
 
 # User input: select the sociodemographic variable
 
 audio_type = st.sidebar.selectbox("Choose an audio type:", audio_types)
 if audio_type == 'a_vowel phonation':
+    audio_type = 'a_vowel'
     feature_set = st.sidebar.selectbox("Choose a feature set:", feature_set_phonation)
 elif audio_type == 'reading':
     feature_set = st.sidebar.selectbox("Choose a feature set:", feature_set_reading)
@@ -35,8 +36,6 @@ if gender_var == 'female':
     gender_des = 'women'
 elif gender_var == 'male':
     gender_des = 'men'
-else:
-    gender_des = 'all participants'
 
 # ----------------------
 # Main Area
