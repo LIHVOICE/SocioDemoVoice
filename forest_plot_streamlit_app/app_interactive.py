@@ -7,19 +7,27 @@ from PIL import Image
 # Folder containing the data
 DATA_FOLDER = "regression data"
 HEATMAP_FOLDER = "heatmaps"
-
+SOCIO_VARIABLES = {
+    'Age': 'age_group',
+    'Language': 'surveyLocale',
+    'Mother tongue': 'native',
+    'Education level' : 'educ',
+    'Smoking Status': 'smoking',
+    'Alcohol Consumption': 'alcohol',   
+}
 
 # ----------------------
 # Sidebar Menu
 # ----------------------
-st.sidebar.title("Forest Plot Visualizer 🌲")
+st.sidebar.title("Controls for joint forest plot and heatmap viz 🌲")
 st.sidebar.caption("Select parameters")
-show_heatmap = st.sidebar.checkbox("Display Heatmap")
+
 
 audio_types = ['reading', 'a_vowel phonation'] 
 feature_set_reading = ['egemaps', 'articulation', 'phonological', 'phonation', 'prosody', 'glottal'] 
 feature_set_phonation = ['egemaps', 'phonation', 'prosody', 'glottal'] 
-socio_factors = socio_factors = ['age', 'surveyLocale', 'native', 'educ_years', 'smoking', 'alcohol'] 
+socio_factors = list(SOCIO_VARIABLES.keys())
+show_heatmap = st.sidebar.checkbox("Display Heatmap")
 
 # User input: select the sociodemographic variable
 
@@ -56,22 +64,18 @@ fig = generate_plotly_forest_plot(
     feature_name = feature_set,
     gender = gender_var)
 
-input_filename = f"{audio_type}_{feature_set}_{gender_var}_{socio_var}.jpg"
+heatmap_filename = f"{audio_type}_{feature_set}_{gender_var}_{SOCIO_VARIABLES[socio_var]}.jpg"
+heatmap_path = os.path.join(HEATMAP_FOLDER, heatmap_filename)
 # Load an image using Pillow
-heatmap_image = Image.open(os.path.join(HEATMAP_FOLDER, input_filename))
+if os.path.exists(heatmap_path):
+    heatmap_image = Image.open(heatmap_path)
+else:
+    heatmap_image = Image.open(os.path.join(HEATMAP_FOLDER, 'nothing_to_see_here.gif'))
+
 
 # Display
 st.plotly_chart(fig, use_container_width=True)
 
 if show_heatmap:
-    img = Image.open("heatmap.jpg")
-    st.image(img, use_container_width=True)
-
-if "show_heatmap" not in st.session_state:
-    st.session_state.show_heatmap = False
-
-if st.button("Toggle Heatmap"):
-    st.session_state.show_heatmap = not st.session_state.show_heatmap
-
-if st.session_state.show_heatmap:
-    st.image(heatmap_image, caption="Associated heatmap", use_container_width=True)
+    # Heatmap in sidebar
+    st.sidebar.image(heatmap_image, caption="Correlation Map", use_container_width=True)
