@@ -2,15 +2,19 @@ import streamlit as st
 import pandas as pd
 from utils.plot_helpers import generate_plotly_forest_plot
 import os
+from PIL import Image
 
 # Folder containing the data
 DATA_FOLDER = "regression data"
+HEATMAP_FOLDER = "heatmaps"
+
 
 # ----------------------
 # Sidebar Menu
 # ----------------------
 st.sidebar.title("Forest Plot Visualizer 🌲")
 st.sidebar.caption("Select parameters")
+show_heatmap = st.sidebar.checkbox("Display Heatmap")
 
 audio_types = ['reading', 'a_vowel phonation'] 
 feature_set_reading = ['egemaps', 'articulation', 'phonological', 'phonation', 'prosody', 'glottal'] 
@@ -52,5 +56,22 @@ fig = generate_plotly_forest_plot(
     feature_name = feature_set,
     gender = gender_var)
 
+input_filename = f"{audio_type}_{feature_set}_{gender_var}_{socio_var}.jpg"
+# Load an image using Pillow
+heatmap_image = Image.open(os.path.join(HEATMAP_FOLDER, input_filename))
+
 # Display
 st.plotly_chart(fig, use_container_width=True)
+
+if show_heatmap:
+    img = Image.open("heatmap.jpg")
+    st.image(img, use_container_width=True)
+
+if "show_heatmap" not in st.session_state:
+    st.session_state.show_heatmap = False
+
+if st.button("Toggle Heatmap"):
+    st.session_state.show_heatmap = not st.session_state.show_heatmap
+
+if st.session_state.show_heatmap:
+    st.image(heatmap_image, caption="Associated heatmap", use_container_width=True)

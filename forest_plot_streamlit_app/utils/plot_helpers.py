@@ -1,6 +1,7 @@
 import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
+import matplotlib.image as mpimg
 
 def generate_plotly_forest_plot(
     input_filename,
@@ -101,6 +102,26 @@ def generate_plotly_forest_plot(
 
 
 def show_heatmap(
+    audio_type,
+    coef_name,
+    feature_name,
+    gender
+):
+    # Load the .npy file (assuming it was saved with pickling enabled)
+    input_filename = f"{audio_type}_{feature_name}_{gender}_{coef_name}.jpg"
+    heatmap = np.load(input_filename)
+    columns_to_work_with = np.load(columns_to_work_with, allow_pickle=True)
+    print(columns_to_work_with)
+    # Read the image
+    image = mpimg.imread('path_to_image.jpg')
+
+    # Display the image
+    plt.imshow(image)
+    plt.axis('off')  # Turn off axis
+    plt.show()
+    return fig
+
+def generate_heatmap(
     input_filename,
     coef_name,
     feature_name,
