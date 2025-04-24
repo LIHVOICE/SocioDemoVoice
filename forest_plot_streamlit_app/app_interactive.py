@@ -70,7 +70,7 @@ heatmap_path = os.path.join(HEATMAP_FOLDER, heatmap_filename)
 if os.path.exists(heatmap_path):
     heatmap_image = Image.open(heatmap_path)
 else:
-    heatmap_image = Image.open(os.path.join(HEATMAP_FOLDER, 'nothing_to_see_here.gif'))
+    heatmap_image = os.path.join(HEATMAP_FOLDER, 'nothing_to_see_here.gif')
 
 
 # Display

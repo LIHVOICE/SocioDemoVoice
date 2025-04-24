@@ -11,10 +11,10 @@ def generate_plotly_forest_plot(
     feature_name,
     gender
 ):
-    # Load the .npy file (assuming it was saved with pickling enabled)
+    # Load the .npy file
     data = np.load(input_filename, allow_pickle=True)
     columns_to_work_with = np.load(columns_to_work_with, allow_pickle=True)
-    print(columns_to_work_with)
+
     # Organizing results
     coefficients = np.array([r[0] for r in data])
     ci_low = np.array([r[1] for r in data])
@@ -26,10 +26,13 @@ def generate_plotly_forest_plot(
 
     #for j, coef_name in enumerate(socio_factors):
 
-    y_positions = np.arange(len(columns_to_work_with))[::-1]  # Reverse for top-down
+    # Reverse the order of y_positions and columns_to_work_with
+    columns_to_work_with = columns_to_work_with[::-1]
+    y_positions = np.arange(len(columns_to_work_with))
     coefs = coefficients_df[coef_name].loc[columns_to_work_with]
     ci_low = ci_low_df[coef_name].loc[columns_to_work_with]
     ci_high = ci_high_df[coef_name].loc[columns_to_work_with]
+
 
     # Determine significance based on whether CI crosses zero
     significance = ['Not Significant' if l * h < 0 else 'Significant' for l, h in zip(ci_low, ci_high)]
@@ -57,6 +60,7 @@ def generate_plotly_forest_plot(
     ))
 
     for i, feature in enumerate(columns_to_work_with):
+        print(feature)
         hover_text = (
             f"<b>{feature}</b><br>"
             f"Coef: {coefs[i]:.3f}<br>"
@@ -86,7 +90,7 @@ def generate_plotly_forest_plot(
 
     fig.update_yaxes(
         tickvals=y_positions,
-        ticktext=columns_to_work_with[::-1],  # reverse labels to match reversed y
+        ticktext=columns_to_work_with,  # reverse labels to match reversed y
         title='Features'
     )
     fig.update_xaxes(title='Coefficient Value')
@@ -95,8 +99,7 @@ def generate_plotly_forest_plot(
         #title=f"Forest Plot: {feature_name} features vs. {coef_name} ({gender})",
         height=600 + len(columns_to_work_with) * 15,
         plot_bgcolor="lightgrey",
-        margin=dict(l=100, r=20, t=80, b=40),
-        yaxis=dict(autorange="reversed")  # ← this does the flip
+        margin=dict(l=100, r=20, t=80, b=40)
     )
 
     return fig
