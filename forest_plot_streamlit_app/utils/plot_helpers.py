@@ -95,7 +95,8 @@ def generate_plotly_forest_plot(
         #title=f"Forest Plot: {feature_name} features vs. {coef_name} ({gender})",
         height=600 + len(columns_to_work_with) * 15,
         plot_bgcolor="lightgrey",
-        margin=dict(l=100, r=20, t=80, b=40)
+        margin=dict(l=100, r=20, t=80, b=40),
+        yaxis=dict(autorange="reversed")  # ← this does the flip
     )
 
     return fig
