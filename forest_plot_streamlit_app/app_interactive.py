@@ -25,7 +25,7 @@ st.sidebar.caption("Select parameters")
 
 audio_types = ['reading', 'a_vowel phonation'] 
 feature_set_reading = ['egemaps', 'articulation', 'phonological', 'phonation', 'prosody', 'glottal'] 
-feature_set_phonation = ['egemaps', 'phonation', 'prosody', 'glottal'] 
+feature_set_phonation = ['egemaps', 'phonation', 'glottal'] 
 socio_factors = list(SOCIO_VARIABLES.keys())
 show_heatmap = st.sidebar.checkbox("Display Heatmap")
 
