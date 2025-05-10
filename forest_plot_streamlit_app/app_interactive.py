@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from utils.plot_helpers import generate_plotly_forest_plot, generate_plotly_heatmap
+from utils.plot_helpers import *
 import os
 from PIL import Image
 
@@ -70,27 +70,26 @@ with tab1:
 
 with tab2:
 
+    st.title(f"Significantly different {feature_set} features between {socio_var} groups")
+
     if socio_var in ['Age', 'Education level', 'Smoking Status']:
 
-        st.title(f"Significantly different {feature_set} features between {socio_var} groups")
-        heatmap_fig = generate_plotly_heatmap(
+        fig = generate_plotly_heatmap(
             gender=gender_var,
             audio_type=audio_type,
             feature_name=feature_set,
             coef_name=SOCIO_VARIABLES[socio_var]
         )
 
-        heatmap_fig.update_traces(textfont_size=14)
-        heatmap_fig.update_layout(
-            width=800,
-            height=1000,
-            autosize=False,
-            xaxis=dict(tickfont=dict(size=12)),
-            yaxis=dict(tickfont=dict(size=12))
-        )
-            
-        st.plotly_chart(heatmap_fig, use_container_width=True)
-
     else:
 
-        st.text('Other type of viz')
+        fig = generate_plotly_barplot(
+            gender=gender_var,
+            audio_type=audio_type,
+            feature_name=feature_set,
+            coef_name=SOCIO_VARIABLES[socio_var]
+        )
+
+
+    fig.update_traces(textfont_size=14)
+    st.plotly_chart(fig, use_container_width=True)

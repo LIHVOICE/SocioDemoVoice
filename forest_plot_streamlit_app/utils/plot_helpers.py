@@ -138,9 +138,18 @@ def generate_plotly_heatmap(
             )
         )
 
+    fig.update_layout(
+    width=800,
+    height=1000,
+    autosize=False,
+    xaxis=dict(tickfont=dict(size=12)),
+    yaxis=dict(tickfont=dict(size=12))
+    )
+
     return fig
 
-def generate_plotly_dotplot(
+
+def generate_plotly_barplot(
     gender,
     audio_type,
     feature_name,
@@ -151,25 +160,43 @@ def generate_plotly_dotplot(
     parent_dir = os.path.dirname(os.getcwd())
     df_path = os.path.join(parent_dir, 'FOREST_PLOT_STREAMLIT_APP', 'other_viz_data', input_filename)
     df = pd.read_csv(df_path, index_col=0)
-    row_labels = df.index.to_list()
 
-    fig= px.imshow(
-    df,
-    text_auto=True,
-    aspect="auto",
-    color_continuous_scale="RdBu",
-    labels=dict(color="Median")
+    group_names = df.columns.tolist()
+    group_colors = {
+    group_names[0]: '#636EFA',  # Blue
+    group_names[1]: '#00CC96'   # Green (replacing red to avoid confusion)
+    }
+
+    fig = go.Figure()
+
+    for group in group_names:
+        fig.add_trace(go.Bar(
+            y=df.index,  # Features on Y-axis
+            x=df[group],  # Normalized median values
+            name=group,
+            orientation='h',
+            marker=dict(color=group_colors[group])
+        ))
+
+    fig.update_layout(
+        barmode='group',
+        xaxis_title='Normalized Median Value',
+        yaxis_title='Feature',
+        yaxis=dict(
+        categoryorder='array',
+        categoryarray=list(df.index)[::-1]  # maintain original order top-down
+        ),
+        legend=dict(
+        x=1.05,  # Pushes it to the right (1.0 is the far right of the plot area)
+        y=1,     # Top of the plot
+        xanchor='left',  # Anchors x position relative to the left of the legend box
+        yanchor='top'    # Anchors y position relative to the top of the legend box
+        ),
+        height= 35 * len(df),
+        font=dict(size=14),
+        margin=dict(l=100, r=30, t=40, b=40),
+        plot_bgcolor="lightgrey",
+        template='plotly_white'
     )
 
-    if row_labels is not None:
-        fig.update_layout(
-            yaxis=dict(
-                tickmode="array",
-                tickvals=list(range(len(row_labels))),
-                ticktext=row_labels
-            )
-        )
-
     return fig
-
-
