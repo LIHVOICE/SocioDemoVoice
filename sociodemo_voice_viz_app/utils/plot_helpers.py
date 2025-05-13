@@ -117,7 +117,7 @@ def generate_plotly_heatmap(
     # Load the .npy file (assuming it was saved with pickling enabled)
     input_filename = f"{gender}_{audio_type}_{feature_name}_{coef_name}.csv"
     parent_dir = os.path.dirname(os.getcwd())
-    df_path = os.path.join(parent_dir, 'FOREST_PLOT_STREAMLIT_APP', 'other_viz_data', input_filename)
+    df_path = os.path.join(parent_dir, 'sociodemo_voice_viz_app', 'other_viz_data', input_filename)
     df = pd.read_csv(df_path, index_col=0)
 
     if df.empty:
