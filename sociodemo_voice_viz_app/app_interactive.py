@@ -15,11 +15,22 @@ SOCIO_VARIABLES = {
     'Smoking Status': 'smoking',
     'Alcohol Consumption': 'alcohol',   
 }
+LINKS = {
+    "ColiveVoice": "https://www.colivevoice.org",
+    "Disvoice": "https://disvoice.readthedocs.io/en/latest/",
+}
 
 # ----------------------
 # Sidebar Menu
 # ----------------------
-st.sidebar.title("Visualization Controls 📊")
+st.sidebar.markdown(
+    """
+    <h1 style='font-size: 36px; color: #4babbe;'>Sociodemographic variables & Voice</h1>
+    """,
+    unsafe_allow_html=True
+)
+st.sidebar.caption(f"A Colive Voice Study: {LINKS['ColiveVoice']}.")
+st.sidebar.title("Visualization Controls")
 st.sidebar.caption("Select parameters")
 
 
@@ -31,28 +42,30 @@ audio_type = st.sidebar.selectbox("Choose an audio type:", audio_types)
 
 tab1, tab2 = st.tabs(["Forest Plots", "More visualization"])
 
+
+if audio_type == 'a_vowel phonation':
+    audio_type = 'a_vowel'
+    feature_set = st.sidebar.selectbox("Choose a feature set:", feature_set_phonation)
+elif audio_type == 'reading':
+    feature_set = st.sidebar.selectbox("Choose a feature set:", feature_set_reading)
+
+if feature_set == 'egemaps':
+    st.sidebar.caption(f"Learn more about eGeMAPS features: https://sail.usc.edu/publications/files/eyben-preprinttaffc-2015.pdf.")
+else:
+    st.sidebar.caption(f"Learn more on {feature_set} features: {LINKS['Disvoice'] + str(feature_set.capitalize()) + '.html'}.")
+    
+socio_var = st.sidebar.selectbox("Choose a sociodemographic variable:", socio_factors)
+gender_var = st.sidebar.selectbox("Choose gender:", ['female', 'male'])
+
+filename = f'{audio_type}_{feature_set}_{gender_var}.npy'
+feature_columns = f'{feature_set}_columns_to_work_with.npy'
+
+if gender_var == 'female':
+    gender_des = 'women'
+elif gender_var == 'male':
+    gender_des = 'men'
+
 with tab1:
-
-    if audio_type == 'a_vowel phonation':
-        audio_type = 'a_vowel'
-        feature_set = st.sidebar.selectbox("Choose a feature set:", feature_set_phonation)
-    elif audio_type == 'reading':
-        feature_set = st.sidebar.selectbox("Choose a feature set:", feature_set_reading)
-
-    socio_var = st.sidebar.selectbox("Choose a sociodemographic variable:", socio_factors)
-    gender_var = st.sidebar.selectbox("Choose gender:", ['female', 'male'])
-
-    filename = f'{audio_type}_{feature_set}_{gender_var}.npy'
-    feature_columns = f'{feature_set}_columns_to_work_with.npy'
-
-    if gender_var == 'female':
-        gender_des = 'women'
-    elif gender_var == 'male':
-        gender_des = 'men'
-
-    # ----------------------
-    # Main Area
-    # ----------------------
 
     st.title(f"The effect of {socio_var} on the {feature_set} features")
 
@@ -97,3 +110,28 @@ with tab2:
     except:
         st.error(f"There is no significantly different {feature_set} features between {socio_var} value groups")
 
+
+# Add the footer at the bottom
+st.sidebar.markdown(
+    """
+    <style>
+    .sidebar-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 15rem; /* Adjust this value based on your sidebar width */
+        padding: 10px;
+        font-size: 12px;
+        text-align: center;
+        color: #888;
+        background-color: transparent;
+    }
+    </style>
+    <div class="sidebar-footer">
+        &copy; 2025 A DDP Colive Voice Project Demo.
+        <br>All Rights Reserved.
+    </div>
+    """,
+    unsafe_allow_html=True
+
+)
