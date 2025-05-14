@@ -6,7 +6,6 @@ from PIL import Image
 
 # Folder containing the data
 DATA_FOLDER = "regression data"
-HEATMAP_FOLDER = "heatmaps"
 SOCIO_VARIABLES = {
     'Age': 'age_group',
     'Language': 'surveyLocale',
