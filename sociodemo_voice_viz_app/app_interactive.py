@@ -1,3 +1,4 @@
+import datetime
 import streamlit as st
 import pandas as pd
 from utils.plot_helpers import *
@@ -110,27 +111,15 @@ with tab2:
         st.error(f"There is no significantly different {feature_set} features between {socio_var} value groups")
 
 
+current_year = datetime.datetime.now().year
+
 # Add the footer at the bottom
-st.sidebar.markdown(
-    """
-    <style>
-    .sidebar-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 15rem; /* Adjust this value based on your sidebar width */
-        padding: 10px;
-        font-size: 12px;
-        text-align: center;
-        color: #888;
-        background-color: transparent;
-    }
-    </style>
+st.caption(
+    f"""
     <div class="sidebar-footer">
-        &copy; 2025 A DDP Colive Voice Project Demo.
-        <br>All Rights Reserved.
+        &copy; {current_year} A DDP Colive Voice Project Demo.
+        All Rights Reserved.
     </div>
     """,
     unsafe_allow_html=True
-
 )
