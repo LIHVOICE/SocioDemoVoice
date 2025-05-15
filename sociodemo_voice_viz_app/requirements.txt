@@ -2,7 +2,8 @@ streamlit>=1.31.0
 pandas>=1.5
 numpy>=1.22
 plotly>=5.15
+matplotlib
+seaborn
 #statsmodels
 #scipy
-#matplotlib
-#seaborn
+#
