@@ -20,9 +20,6 @@ LINKS = {
     "Disvoice": "https://disvoice.readthedocs.io/en/latest/",
 }
 
-# ----------------------
-# Sidebar Menu
-# ----------------------
 st.sidebar.markdown(
     """
     <h1 style='font-size: 36px; color: #4babbe;'>Sociodemographic variables & Voice</h1>

@@ -131,7 +131,7 @@ def generate_plotly_heatmap(
     df,
     text_auto=True,
     aspect="auto",
-    color_continuous_scale="RdBu",
+    color_continuous_scale="RdBu_r",
     labels=dict(color="Median")
     )
 
