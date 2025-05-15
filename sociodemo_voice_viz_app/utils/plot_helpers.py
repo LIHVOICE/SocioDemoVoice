@@ -1,24 +1,30 @@
 import os
+from pathlib import Path
 import plotly.graph_objects as go
 import matplotlib.image as mpimg
 import plotly.express as px
 import numpy as np
 import pandas as pd
 
-APP_PATH = 'sociodemo_voice_viz_app'
-PLOT_DATA_FOLDER = 'other_viz_data'
+REGRESSION_DATA_FOLDER = 'regression_data'
+OTHER_PLOT_DATA_FOLDER = 'other_viz_data'
+project_root = Path(__file__).resolve().parents[1]
 
 def generate_plotly_forest_plot(
-    input_filename,
-    columns_to_work_with,
-    socio_factors,
-    coef_name,
-    feature_name,
-    gender
+        socio_factors,
+        gender,
+        audio_type,
+        feature_name,
+        coef_name
 ):
     # Load the .npy file
-    data = np.load(input_filename, allow_pickle=True)
-    columns_to_work_with = np.load(columns_to_work_with, allow_pickle=True)
+    filename = f'{gender}_{audio_type}_{feature_name}.npy'
+    datafile = os.path.join(project_root, REGRESSION_DATA_FOLDER, filename)
+    data = np.load(datafile, allow_pickle=True)
+
+    feature_columns = f'{feature_name}_columns_to_work_with.npy'
+    columns_file = os.path.join(project_root, REGRESSION_DATA_FOLDER, feature_columns)
+    columns_to_work_with = np.load(columns_file, allow_pickle=True)
 
     # Organizing results
     coefficients = np.array([r[0] for r in data])
@@ -118,8 +124,7 @@ def generate_plotly_heatmap(
 ):
     # Load the .npy file (assuming it was saved with pickling enabled)
     input_filename = f"{gender}_{audio_type}_{feature_name}_{coef_name}.csv"
-    parent_dir = os.path.dirname(os.getcwd())
-    df_path = os.path.join(parent_dir, APP_PATH, PLOT_DATA_FOLDER, input_filename)
+    df_path = os.path.join(project_root, OTHER_PLOT_DATA_FOLDER, input_filename)
     df = pd.read_csv(df_path, index_col=0)
 
     if df.empty:
@@ -161,8 +166,7 @@ def generate_plotly_barplot(
     coef_name,
 ):
     input_filename = f"{gender}_{audio_type}_{feature_name}_{coef_name}.csv"
-    parent_dir = os.path.dirname(os.getcwd())
-    df_path = os.path.join(parent_dir, APP_PATH, PLOT_DATA_FOLDER, input_filename)
+    df_path = os.path.join(project_root, OTHER_PLOT_DATA_FOLDER, input_filename)
     df = pd.read_csv(df_path, index_col=0)
 
     if df.empty:

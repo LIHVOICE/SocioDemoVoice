@@ -18,6 +18,7 @@ SOCIO_VARIABLES = {
 LINKS = {
     "ColiveVoice": "https://www.colivevoice.org",
     "Disvoice": "https://disvoice.readthedocs.io/en/latest/",
+    "eGeMAPS" : "https://sail.usc.edu/publications/files/eyben-preprinttaffc-2015.pdf"
 }
 
 st.sidebar.markdown(
@@ -47,15 +48,12 @@ elif audio_type == 'reading':
     feature_set = st.sidebar.selectbox("Choose a feature set:", feature_set_reading)
 
 if feature_set == 'egemaps':
-    st.sidebar.caption(f"Learn more about eGeMAPS features: https://sail.usc.edu/publications/files/eyben-preprinttaffc-2015.pdf.")
+    st.sidebar.caption(f"Learn more about eGeMAPS features: {LINKS['eGeMAPS']}.")
 else:
     st.sidebar.caption(f"Learn more on {feature_set} features: {LINKS['Disvoice'] + str(feature_set.capitalize()) + '.html'}.")
     
 socio_var = st.sidebar.selectbox("Choose a sociodemographic variable:", socio_factors)
 gender_var = st.sidebar.selectbox("Choose gender:", ['female', 'male'])
-
-filename = f'{audio_type}_{feature_set}_{gender_var}.npy'
-feature_columns = f'{feature_set}_columns_to_work_with.npy'
 
 if gender_var == 'female':
     gender_des = 'women'
@@ -68,12 +66,12 @@ with tab1:
 
     # Generate plot
     fig = generate_plotly_forest_plot(
-        input_filename = os.path.join(DATA_FOLDER, filename),
-        columns_to_work_with = os.path.join(DATA_FOLDER, feature_columns),
-        socio_factors = socio_factors,
-        coef_name = socio_var,
-        feature_name = feature_set,
-        gender = gender_var)
+        socio_factors=socio_factors,
+        gender=gender_var,
+        audio_type=audio_type,
+        feature_name=feature_set,
+        coef_name=socio_var
+)
     # Display
     st.plotly_chart(fig, use_container_width=True)
 
